@@ -58,7 +58,7 @@ class DashboardController extends AbstractDashboardController
 
         if ($this->isGranted('ROLE_SYNDIC')) {
             yield EA_MenuItem::section('Gestion Syndic');
-            yield EA_MenuItem::linkToRoute('Copropriété', 'fa-file-contract', 'admin_building_index');
+            yield EA_MenuItem::linkToRoute('Copropriété', 'fa-file-contract', 'admin_copropriete_index');
         }
 
         yield EA_MenuItem::section('Gestion Immobilière');
