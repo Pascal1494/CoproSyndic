@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CoproprieteRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -25,6 +27,24 @@ class Copropriete
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $photo = null;
+
+    /**
+     * @var Collection<int, Batiment>
+     */
+    #[ORM\OneToMany(targetEntity: Batiment::class, mappedBy: 'copropriete', orphanRemoval: true)]
+    private Collection $batiments;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $closedAt = null;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+        $this->batiments = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -75,6 +95,60 @@ class Copropriete
     public function setPhoto(?string $photo): static
     {
         $this->photo = $photo;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Batiment>
+     */
+    public function getBatiments(): Collection
+    {
+        return $this->batiments;
+    }
+
+    public function addBatiment(Batiment $batiment): static
+    {
+        if (!$this->batiments->contains($batiment)) {
+            $this->batiments->add($batiment);
+            $batiment->setCopropriete($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBatiment(Batiment $batiment): static
+    {
+        if ($this->batiments->removeElement($batiment)) {
+            // set the owning side to null (unless already changed)
+            if ($batiment->getCopropriete() === $this) {
+                $batiment->setCopropriete(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(?\DateTimeImmutable $createdAt): static
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getClosedAt(): ?\DateTimeImmutable
+    {
+        return $this->closedAt;
+    }
+
+    public function setClosedAt(?\DateTimeImmutable $closedAt): static
+    {
+        $this->closedAt = $closedAt;
 
         return $this;
     }
