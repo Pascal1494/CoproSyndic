@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\LotRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -36,6 +38,17 @@ class Lot
     #[ORM\ManyToOne(inversedBy: 'lots')]
     #[ORM\JoinColumn(nullable: false)]
     private ?user $proprietaire = null;
+
+    /**
+     * @var Collection<int, Badge>
+     */
+    #[ORM\OneToMany(targetEntity: Badge::class, mappedBy: 'lot')]
+    private Collection $badges;
+
+    public function __construct()
+    {
+        $this->badges = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -122,6 +135,36 @@ class Lot
     public function setProprietaire(?user $proprietaire): static
     {
         $this->proprietaire = $proprietaire;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Badge>
+     */
+    public function getBadges(): Collection
+    {
+        return $this->badges;
+    }
+
+    public function addBadge(Badge $badge): static
+    {
+        if (!$this->badges->contains($badge)) {
+            $this->badges->add($badge);
+            $badge->setLot($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBadge(Badge $badge): static
+    {
+        if ($this->badges->removeElement($badge)) {
+            // set the owning side to null (unless already changed)
+            if ($badge->getLot() === $this) {
+                $badge->setLot(null);
+            }
+        }
 
         return $this;
     }
