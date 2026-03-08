@@ -1,0 +1,53 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block content %}
+
+    <h1>Statistiques de la Copropriété</h1>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card p-3">
+                <h3>Utilisateurs inscrits : {{ total_users }}</h3>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card p-3">
+                <h3>Bâtiments enregistrés : {{ total_buildings }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card bg-primary text-white shadow">
+                <div class="card-body">
+                    <h5>Total Résidents</h5>
+                    <h2 class="font-weight-bold">{{ total_users }}</h2>
+                </div>
+            </div>
+        </div>
+{% if is_granted('ROLE_SYNDIC') %}
+    <div class="col-md-4">
+        <div class="card bg-info text-white shadow">
+            <div class="card-body">
+                <h5>Copropriétés en gestion</h5>
+                <h2 class="font-weight-bold">{{ total_copros }}</h2>
+            </div>
+        </div>
+    </div>
+{% endif %}
+        <div class="col-md-4">
+            <div class="card bg-success text-white shadow">
+                <div class="card-body">
+                    <h5>Bâtiments</h5>
+                    <h2 class="font-weight-bold">{{ total_buildings }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-header">Dernières activités</div>
+        <div class="card-body">
+            <p>Système opérationnel. Utilisez le menu latéral pour gérer la copropriété.</p>
+        </div>
+    </div>
+{% endblock %}
