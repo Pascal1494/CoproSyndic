@@ -50,7 +50,7 @@ class AppFixtures extends Fixture
             // Générer une référence unique pour le dossier
             // Par exemple : COPRO-2026-001, COPRO-2026-002...
             $copro->setRefDossier('REF-' . strtoupper($faker->bothify('??-####')));
-
+            $copro->getCreatedAt($faker->dateTimeBetween('-5 years', 'now'));
             $copro->setNom("Copropriété " . $faker->company); // Nom aléatoire type entreprise
             $copro->setAdresse($faker->address); // Adresse aléatoire française
             $manager->persist($copro);

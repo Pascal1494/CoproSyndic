@@ -152,4 +152,5 @@ class Copropriete
 
         return $this;
     }
+
 }
